@@ -1,20 +1,18 @@
 #Author: CptR3dBeard
 #Date Project Started: 25/10/2021
 #Used libraries
-from fastapi.encoders import jsonable_encoder
 import pymongo
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
+from sklearn import linear_model
 from sklearn.linear_model import LinearRegression
 
 """Setting our variables"""   
-lr = LinearRegression()
+lr = LinearRegression()             # defining basic Linear Regression
+rig = linear_model.Ridge(alpha=.5)  # defining ridge regression model with alpha of 0.5
 client = pymongo.MongoClient(f'mongodb://localhost:27017') # establish our database connection
-db = client['stocks']             # Use this database
-col = db['data']                  # Search for this collection within database
-pred = db['predictions']
-    
+db = client['stocks']                                      # Use this database
+col = db['data']                                           # Search for this collection within database
 
 def LinearR():
     """This function LinearR queries the MongoDB for the collection.
@@ -28,3 +26,16 @@ def LinearR():
         y= df.iloc[:, 1].values     # use location based indexing on 2 columns to determine y axis
         lr.fit(X, y)                # we are now performing linear regression on the data supplied.
         return np.ndarray.tolist(lr.predict(X)) # Converting the X value of linear prediction to a list returning to FastAPI
+
+def Ridge_Regression():
+    """This function performs Ridge Regression fomr the MongoDB collection.
+    Example; our test data contains microsft stock price over 12months from 2019-2020
+    this data undergoes ridge regression."""
+    x =col.find({}, {'_id': 0})
+    for i in x:
+        df = pd.DataFrame(x)        # here we define out dataframe as a variable DF
+        df.reset_index(drop=True, inplace=True)     # reseting & dropping the index of Panda datafrom so Sklearn can process
+        X = df.iloc[:, :-1].values  # use location based indexing on 2 columns to determine x axis
+        y= df.iloc[:, 1].values     # use location based indexing on 2 columns to determine y axis
+        rig.fit(X, y)
+        return np.ndarray.tolist(rig.predict(X))    # convert numpy array into a list for ridge prediction
