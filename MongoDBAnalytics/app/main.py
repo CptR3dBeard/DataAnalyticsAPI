@@ -4,6 +4,8 @@
 import pymongo
 import numpy as np
 import pandas as pd
+import csv
+import json
 from sklearn import linear_model
 from sklearn.linear_model import LinearRegression
 
@@ -12,7 +14,7 @@ lr = LinearRegression()             # defining basic Linear Regression
 rig = linear_model.Ridge(alpha=.5)  # defining ridge regression model with alpha of 0.5
 client = pymongo.MongoClient(f'mongodb://localhost:27017') # establish our database connection
 db = client['stocks']                                      # Use this database
-col = db['data']                                           # Search for this collection within database
+col = db['TestData']                                           # Search for this collection within database
 
 def LinearR():
     """This function LinearR queries the MongoDB for the collection.
@@ -39,3 +41,12 @@ def Ridge_Regression():
         y= df.iloc[:, 1].values     # use location based indexing on 2 columns to determine y axis
         rig.fit(X, y)
         return np.ndarray.tolist(rig.predict(X))    # convert numpy array into a list for ridge prediction
+
+def insert_new_dataset(file_name):
+    """This function allows the user to insert a complete new dataset into a MongoDB collection
+    Note to self:
+                    Function is getting the data but cannot figure out how to upload?
+                    Complete this first before continuing. DATA IS READ AS JSON"""
+    df = pd.read_csv(file_name)
+    print(df)
+    return{'Pymongo is reading data':'Test Successful'}                       
