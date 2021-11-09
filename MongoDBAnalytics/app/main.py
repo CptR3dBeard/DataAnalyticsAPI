@@ -4,7 +4,6 @@
 import pymongo
 import numpy as np
 import pandas as pd
-import csv
 import json
 from sklearn import linear_model
 from sklearn.linear_model import LinearRegression
@@ -44,9 +43,8 @@ def Ridge_Regression():
 
 def insert_new_dataset(file_name):
     """This function allows the user to insert a complete new dataset into a MongoDB collection
-    Note to self:
-                    Function is getting the data but cannot figure out how to upload?
-                    Complete this first before continuing. DATA IS READ AS JSON"""
-    df = pd.read_csv(file_name)
-    print(df)
-    return{'Pymongo is reading data':'Test Successful'}                       
+    The data can be anything and it will upload to the localhost database for MongoDB"""
+    df = pd.read_csv(file_name)                     # Reading the uploaded file contents as CSV
+    data = df.to_dict(orient="records")             # Converting the dataframe to a dictionary
+    col.insert(data)                                # Executing the collection insert function using the converted dataframe
+    return{'Test':'Successful'}                     # Return successful test to API

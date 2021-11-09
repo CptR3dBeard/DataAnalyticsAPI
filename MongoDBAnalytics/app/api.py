@@ -25,6 +25,7 @@ def index():                                # the useable parameters and a small
             Enter /RidgeRegression in URL to perform RidgeRegression on Microsoft Dataset</h1>
             <h3> This API takes a dataset from a locallly hosted MongoDB and performs different methods<br>
             of data analytics on it to give the user their desired outcome.</h3>
+            <h4>/UploadFile to upload a dataset to LocalDataBase</h4>
         </body>
     </html>
     """  
