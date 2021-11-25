@@ -5,30 +5,17 @@
 # of regression and return them to the screen as a list for the user to do as they wish.
 
 #Imported and Used Libraries
+from starlette.responses import FileResponse
 from fastapi import FastAPI, UploadFile, File
 from fastapi.responses import HTMLResponse
 from main import *
 
 app = FastAPI()                             # defining app for FastAPI
 
-@app.get('/', response_class=HTMLResponse)  # This is our landing page that will tell the user                     
-def index():                                # the useable parameters and a small description
-                                            # of what the API is capable of.
-    return  """                             
-    <html>
-        <head>
-            <title>Data Api😍</title>
-        </head>
-        <body>
-            <h1>This is a landing page for CptR3dBeards DataAnalytics API</h1>
-            <h2>Enter /LinearRegression in URL to perform LinearRegression on Microsoft Dataset<br>
-            Enter /RidgeRegression in URL to perform RidgeRegression on Microsoft Dataset</h1>
-            <h3> This API takes a dataset from a locallly hosted MongoDB and performs different methods<br>
-            of data analytics on it to give the user their desired outcome.</h3>
-            <h4>/UploadFile to upload a dataset to LocalDataBase</h4>
-        </body>
-    </html>
-    """  
+@app.get('/', response_class=HTMLResponse)  # This is our landing page that will tell the user
+async def read_index():
+    return FileResponse('index.html')
+
 @app.post('/UploadFile/')
 def create_upload_file(file: UploadFile = File(...)):
     return insert_new_dataset(file.file)
