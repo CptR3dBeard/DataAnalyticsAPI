@@ -4,7 +4,8 @@
 import pymongo
 import numpy as np
 import pandas as pd
-import json
+import matplotlib.pyplot as plt
+from fastapi.responses import FileResponse
 from sklearn import linear_model
 from sklearn.linear_model import LinearRegression
 
@@ -27,7 +28,6 @@ def LinearR():
         y= df.iloc[:, 1].values                  # use location based indexing on 2 columns to determine y axis
         lr.fit(X, y)                             # we are now performing linear regression on the data supplied.
         return np.ndarray.tolist(lr.predict(X))  # Converting the X value of linear prediction to a list returning to FastAPI
-
 def Ridge_Regression():
     """This function performs Ridge Regression fomr the MongoDB collection.
     Example; our test data contains microsft stock price over 12months from 2019-2020
